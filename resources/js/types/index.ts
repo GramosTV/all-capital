@@ -51,3 +51,8 @@ export interface Expense {
     name: string;
     amount: number;
 }
+
+export interface Member {
+    name: string;
+    salary: number;
+}
