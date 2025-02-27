@@ -38,3 +38,16 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Household {
+    id: number;
+    name: string;
+    code: string;
+    expenses: Expense[];
+}
+
+export interface Expense {
+    id: number;
+    name: string;
+    amount: number;
+}

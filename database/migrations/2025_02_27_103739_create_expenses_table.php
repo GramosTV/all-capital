@@ -13,7 +13,6 @@ return new class extends Migration
             $table->foreignId('household_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->decimal('amount', 10, 2);
-            $table->date('date');
             $table->timestamps();
         });
     }

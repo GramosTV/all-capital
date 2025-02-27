@@ -9,22 +9,20 @@ use Illuminate\Support\Facades\Auth;
 class ExpenseController extends Controller
 {
 
-    public function store(Request $request)
+    public function create(Request $request)
     {
         $request->validate([
             'name' => 'required|string',
             'amount' => 'required|numeric|min:0.01',
-            'date' => 'required|date|before_or_equal:today',
         ]);
 
         Expense::create([
             'name' => $request->name,
             'amount' => $request->amount,
-            'date' => $request->date,
             'household_id' => Auth::user()->household_id,
         ]);
 
-        return back();
+        return back()->with('success', 'Expense created successfully.');
     }
 
     public function update(Request $request, $id)
@@ -32,7 +30,6 @@ class ExpenseController extends Controller
         $request->validate([
             'name' => 'required|string',
             'amount' => 'required|numeric|min:0.01',
-            'date' => 'required|date|before_or_equal:today',
         ]);
 
         $expense = Expense::findOrFail($id);
@@ -44,16 +41,21 @@ class ExpenseController extends Controller
         $expense->update([
             'name' => $request->name,
             'amount' => $request->amount,
-            'date' => $request->date,
         ]);
 
         return redirect()->route('expenses.index')->with('success', 'Expense updated successfully.');
     }
 
 
-    public function destroy(Expense $expense)
+    public function delete(Request $request)
     {
+        $expense = Expense::findOrFail($request->id);
+
+        if (Auth::user()->household_id !== $expense->household_id) {
+            return redirect()->back()->with('error', 'Unauthorized action.');
+        }
+
         $expense->delete();
-        return back();
+        return back()->with('success', 'Expense deleted successfully.');
     }
 }
