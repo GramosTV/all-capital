@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use App\Models\User;
 
 class HouseholdController extends Controller
 {
@@ -48,7 +49,7 @@ class HouseholdController extends Controller
         $user->household_id = $household->id;
         $user->save();
 
-        return to_route('household.join');
+        return to_route('household');
     }
 
     // The new "get" method for the household route:
@@ -58,14 +59,22 @@ class HouseholdController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        // Eager load the household and its related expenses
         $household = $user->household()->with('expenses')->first();
 
-        // Log the household and expenses for debugging
-        error_log(json_encode($household));
+        if (!$household) {
+            return Inertia::render('household', [
+                'household' => null,
+                'membersWithSalaries' => [],
+            ]);
+        }
+
+        $membersWithSalaries = User::where('household_id', $household->id)
+            ->select('name', 'salary')
+            ->get();
 
         return Inertia::render('household', [
             'household' => $household,
+            'members' => $membersWithSalaries,
         ]);
     }
 }
