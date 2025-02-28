@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts';
-import { Label } from '../ui/label';
-import { Switch } from '../ui/switch';
+import { Label } from './ui/label';
+import { Switch } from './ui/switch';
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 const getPercentageLabel = (value: number) => `${(value * 100).toFixed(0)}%`;
 interface ChartProps {

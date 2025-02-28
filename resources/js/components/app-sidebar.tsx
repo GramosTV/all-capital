@@ -18,6 +18,11 @@ const mainNavItems: NavItem[] = [
         url: '/household',
         icon: LayoutGrid,
     },
+    {
+        title: 'Retirement',
+        url: '/retirement',
+        icon: LayoutGrid,
+    },
 ];
 
 const footerNavItems: NavItem[] = [

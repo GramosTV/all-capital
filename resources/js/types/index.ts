@@ -56,3 +56,11 @@ export interface Member {
     name: string;
     salary: number;
 }
+export interface Retirement {
+    instruments: Instrument[];
+}
+export interface Instrument {
+    name: string;
+    yearly_return: number;
+    weight: number;
+}

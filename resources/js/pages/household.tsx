@@ -1,9 +1,9 @@
-import CircleChart from '@/components/household/circle-chart';
+import CircleChart from '@/components/circle-chart';
 import ManageExpenses from '@/components/household/manage-expenses';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
-import { BreadcrumbItem, Household as HouseholdType, Member } from '@/types';
+import { BreadcrumbItem, Household, Member } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -12,13 +12,13 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/household',
     },
 ];
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
+
 interface HouseholdProps {
-    household: HouseholdType | null;
+    household: Household | null;
     members: Member[];
 }
 
-export default function Household({ household, members }: HouseholdProps) {
+export default function HouseholdPage({ household, members }: HouseholdProps) {
     const {
         data: createData,
         setData: setCreateData,
@@ -27,7 +27,6 @@ export default function Household({ household, members }: HouseholdProps) {
     } = useForm({
         name: '',
     });
-
     const {
         data: joinData,
         setData: setJoinData,
@@ -63,7 +62,9 @@ export default function Household({ household, members }: HouseholdProps) {
                     <h2>Want new members? Share your invite code - {household.code}</h2>
                     <div className="mt-8 flex items-center justify-around">
                         <CircleChart title={'Expenses Breakdown'} data={household.expenses} />
-                        <CircleChart title={'Suggested Contributions'} data={members.map((member) => ({ ...member, amount: member.salary }))} />
+                        {members.length > 1 ? (
+                            <CircleChart title={'Suggested Contributions'} data={members.map((member) => ({ ...member, amount: member.salary }))} />
+                        ) : null}
                     </div>
 
                     <ManageExpenses expenses={household.expenses} />
