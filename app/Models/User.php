@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Household::class);
     }
+
+    public function retirement()
+    {
+        return $this->hasOne(Retirement::class, 'user_id');
+    }
 }
