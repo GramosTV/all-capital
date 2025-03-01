@@ -22,9 +22,10 @@ class User extends Authenticatable
         'email',
         'password',
     ];
-
+    protected $dates = ['birthdate'];
     protected $casts = [
         'salary' => 'float',
+        'birthdate' => 'date',
     ];
 
     /**

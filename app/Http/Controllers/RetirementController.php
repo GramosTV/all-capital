@@ -50,6 +50,7 @@ class RetirementController extends Controller
             'retirement' => $retirement,
             'instruments' => $retirement->instruments,
             'fundsLeftToInvest' => round($fundsLeftToInvest, 0),
+            'birthdate' => $user->birthdate,
         ]);
     }
 

@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->foreignId('retirement_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->decimal('yearly_return', 8, 2);
-            $table->decimal('weight', 4, 2);
+            $table->decimal('weight', 5, 2);
             $table->timestamps();
         });
     }
