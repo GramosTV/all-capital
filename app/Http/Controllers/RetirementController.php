@@ -15,10 +15,11 @@ class RetirementController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        $retirement = $user->retirement()->first();
+        $retirement = $user->retirement()->with('instruments')->first();
 
         if (!$retirement) {
             $retirement = $user->retirement()->create([]);
+            $retirement->load('instruments');
         }
 
         $household = $user->household()->with('expenses')->first();
@@ -36,7 +37,6 @@ class RetirementController extends Controller
 
         $totalSalary = $membersWithSalaries->sum('salary');
         $totalExpenses = $household->expenses->sum('amount');
-
         $fundsLeftToInvest = null;
         foreach ($membersWithSalaries as $member) {
             $contribution = ($member->salary / $totalSalary) * $totalExpenses;
@@ -48,9 +48,11 @@ class RetirementController extends Controller
 
         return Inertia::render('retirement', [
             'retirement' => $retirement,
+            'instruments' => $retirement->instruments,
             'fundsLeftToInvest' => round($fundsLeftToInvest, 0),
         ]);
     }
+
 
 
     // FEATURE REMOVED DUE TO FREE API KEY LIMITS

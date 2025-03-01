@@ -9,14 +9,15 @@ class Retirement extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'name', 'instruments'];
-
-    protected $casts = [
-        'instruments' => 'array'
-    ];
+    protected $fillable = ['user_id', 'name'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function instruments()
+    {
+        return $this->hasMany(Instrument::class);
     }
 }

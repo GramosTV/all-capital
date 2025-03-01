@@ -20,4 +20,5 @@ require __DIR__ . '/settings.php';
 require __DIR__ . '/expense.php';
 require __DIR__ . '/household.php';
 require __DIR__ . '/retirement.php';
+require __DIR__ . '/instrument.php';
 require __DIR__ . '/auth.php';
