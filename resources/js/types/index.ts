@@ -57,9 +57,10 @@ export interface Member {
     salary: number;
 }
 export interface Retirement {
-    instruments: Instrument[];
+    id: number;
 }
 export interface Instrument {
+    id: number;
     name: string;
     yearly_return: number;
     weight: number;
