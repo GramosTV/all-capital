@@ -23,6 +23,11 @@ const mainNavItems: NavItem[] = [
         url: '/retirement',
         icon: LayoutGrid,
     },
+    {
+        title: 'Advisor',
+        url: '/advisor',
+        icon: LayoutGrid,
+    },
 ];
 
 const footerNavItems: NavItem[] = [

@@ -43,22 +43,46 @@ export default function RetirementPage({ retirement, fundsLeftToInvest, instrume
     const currentAge = new Date().getFullYear() - birthdate.getFullYear();
     const yearsToRetirement = 65 - currentAge;
 
+    // FIX
     const forecastData = Array.from({ length: yearsToRetirement }, (_, index) => {
-        const totalAmount = instruments.reduce((sum, instrument) => {
+        const yearsPassed = index + 1;
+
+        // Calculate instruments' future value
+        const instrumentsFutureValue = instruments.reduce((sum, instrument) => {
             const monthlyContribution = (instrument.weight / 100) * fundsLeftToInvest;
             const yearlyReturnRate = instrument.yearly_return / 100;
-
-            const yearsPassed = index + 1;
             const futureValue = monthlyContribution * 12 * ((Math.pow(1 + yearlyReturnRate, yearsPassed) - 1) / yearlyReturnRate);
-
             return sum + futureValue;
         }, 0);
+
+        // Calculate free cash's total contributions (0% return)
+        const freeCashMonthly = (freeCashWeight / 100) * fundsLeftToInvest;
+        const freeCashTotal = freeCashMonthly * 12 * yearsPassed;
+
+        const totalAmount = instrumentsFutureValue + freeCashTotal;
 
         return {
             year: new Date().getFullYear() + index,
             amount: Number(totalAmount.toFixed(0)),
         };
     });
+
+    // const forecastData = Array.from({ length: yearsToRetirement }, (_, index) => {
+    //     const totalAmount = instruments.reduce((sum, instrument) => {
+    //         const monthlyContribution = (instrument.weight / 100) * fundsLeftToInvest;
+    //         const yearlyReturnRate = instrument.yearly_return / 100;
+
+    //         const yearsPassed = index + 1;
+    //         const futureValue = monthlyContribution * 12 * ((Math.pow(1 + yearlyReturnRate, yearsPassed) - 1) / yearlyReturnRate);
+
+    //         return sum + futureValue;
+    //     }, 0);
+
+    //     return {
+    //         year: new Date().getFullYear() + index,
+    //         amount: Number(totalAmount.toFixed(0)),
+    //     };
+    // });
 
     // ACCOUNTING INTEREST MONTHLY
     // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //

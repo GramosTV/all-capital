@@ -51,7 +51,9 @@ export default function HouseholdPage({ household, members }: HouseholdProps) {
             },
         });
     };
-
+    const householdIncome = household ? members.reduce((acc, member) => acc + member.salary, 0) : 0;
+    const ratio = (household?.expenses ?? []).reduce((acc, expense) => acc + expense.amount, 0) / householdIncome;
+    console.log(ratio);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Household" />
@@ -63,20 +65,26 @@ export default function HouseholdPage({ household, members }: HouseholdProps) {
                     <div className="mt-8 flex items-center justify-around">
                         <CircleChart title={'Expenses Breakdown'} data={household.expenses} />
                         {members.length > 1 ? (
-                            <CircleChart title={'Suggested Contributions'} data={members.map((member) => ({ ...member, amount: member.salary }))} />
+                            <CircleChart
+                                title={'Suggested Contributions'}
+                                data={members.map((member) => ({
+                                    ...member,
+                                    amount: parseFloat((member.salary * ratio).toFixed(2)),
+                                }))}
+                            />
                         ) : null}
                     </div>
 
                     <ManageExpenses expenses={household.expenses} />
                 </div>
             ) : (
-                <div className="md:px-4">
+                <div className="max-w-2xl md:p-4">
                     <h1>You don't have a household</h1>
                     <p>You need to create or join a household.</p>
 
                     {/* Create Household Form */}
                     <div className="mt-4 space-y-4">
-                        <label htmlFor="household_name" className="font-medium">
+                        <label htmlFor="household_name" className="mb-2 block font-medium">
                             Enter Household Name
                         </label>
                         <Input
@@ -92,8 +100,8 @@ export default function HouseholdPage({ household, members }: HouseholdProps) {
                     </div>
 
                     {/* Join Household Form */}
-                    <div className="mt-4 space-y-4">
-                        <label htmlFor="household_code" className="font-medium">
+                    <div className="mt-8 space-y-4">
+                        <label htmlFor="household_code" className="mb-2 block font-medium">
                             Enter Household Code
                         </label>
                         <Input
