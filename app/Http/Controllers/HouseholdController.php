@@ -49,7 +49,7 @@ class HouseholdController extends Controller
         $user->household_id = $household->id;
         $user->save();
 
-        return to_route('household');
+        return to_route('household.get');
     }
 
     // The new "get" method for the household route:
