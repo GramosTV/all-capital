@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'salary',
+        'birthdate',
     ];
     protected $dates = ['birthdate'];
     protected $casts = [
