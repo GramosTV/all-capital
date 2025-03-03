@@ -22,11 +22,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth } = usePage<SharedData>().props;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm('profileForm', {
         name: auth.user.name,
         email: auth.user.email,
+        salary: auth.user.salary,
+        birthdate: new Date(auth.user.birthdate).toISOString().split('T')[0],
     });
-
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
@@ -41,7 +42,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
 
             <SettingsLayout>
                 <div className="space-y-6">
-                    <HeadingSmall title="Profile information" description="Update your name and email address" />
+                    <HeadingSmall title="Profile information" description="Update your name, email address, salary, and birthdate" />
 
                     <form onSubmit={submit} className="space-y-6">
                         <div className="grid gap-2">
@@ -77,15 +78,47 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                             <InputError className="mt-2" message={errors.email} />
                         </div>
 
+                        <div className="grid gap-2">
+                            <Label htmlFor="salary">Salary</Label>
+
+                            <Input
+                                id="salary"
+                                type="number"
+                                className="mt-1 block w-full"
+                                value={data.salary}
+                                onChange={(e) => setData('salary', Number(e.target.value))}
+                                required
+                                placeholder="Salary"
+                            />
+
+                            <InputError className="mt-2" message={errors.salary} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="birthdate">Birthdate</Label>
+
+                            <Input
+                                id="birthdate"
+                                type="date"
+                                className="mt-1 block w-full"
+                                value={data.birthdate}
+                                onChange={(e) => setData('birthdate', e.target.value)}
+                                required
+                                placeholder="Birthdate"
+                            />
+
+                            <InputError className="mt-2" message={errors.birthdate} />
+                        </div>
+
                         {mustVerifyEmail && auth.user.email_verified_at === null && (
                             <div>
-                                <p className="-mt-4 text-sm text-muted-foreground">
+                                <p className="text-muted-foreground -mt-4 text-sm">
                                     Your email address is unverified.{' '}
                                     <Link
                                         href={route('verification.send')}
                                         method="post"
                                         as="button"
-                                        className="hover:decoration-current! text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out dark:decoration-neutral-500"
+                                        className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                                     >
                                         Click here to resend the verification email.
                                     </Link>
